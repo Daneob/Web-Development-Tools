@@ -1,0 +1,23 @@
+var express = require('express'); // Do Not Edit
+var app = express();              // Do Not Edit
+var bcrypt = require('bcrypt');
+// ----
+
+//*Basic sercuirty meeasures in helmet
+
+const helmet = require('helmet');
+app.use(helmet.hidePoweredBy({ setTo: 'PHP 4.2.0'}));
+app.use(helmet.frameguard({action: 'deny'}));
+app.use(helmet.xssFilter());
+app.use(helmet.noSniff());
+app.use(helmet.ieNoOpen());
+const ninetyDaysInMilliseconds = 90*24*60*60*1000;
+app.use(helmet.hsts({maxAge: ninetyDaysInMilliseconds}))
+app.use(helmet.dnsPrefetchControl())
+app.use(helmet.noCache());
+app.use(helmet.contentSecurityPolicy({
+  directives:{
+    defaultSrc:["'self'"],
+    scriptSrc: ["'self'", 'trusted-cdn.com']
+  }
+}))
